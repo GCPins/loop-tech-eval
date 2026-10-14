@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import dotenv from 'dotenv'; dotenv.config();
 
 test('has title', async ({ page }) => {
   await page.goto('https://playwright.dev/');
