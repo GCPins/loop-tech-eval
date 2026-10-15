@@ -6,8 +6,9 @@ on:
     branches: [ main, master ]
 jobs:
   test:
-    timeout-minutes: 60
+    timeout-minutes: 10
     runs-on: ubuntu-latest
+    environment: default
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -28,4 +29,4 @@ jobs:
       with:
         name: playwright-report
         path: playwright-report/
-        retention-days: 30
+        retention-days: 14
