@@ -1,5 +1,6 @@
 .env
-
+.agents/
+skills-lock.json
 
 # Playwright
 node_modules/

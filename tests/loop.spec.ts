@@ -1,20 +1,19 @@
 import { test, expect } from '@playwright/test';
-import { LoginTest } from './loop.model';
+import type { LoginTest } from './loop.model';
 import data from './loop.data.json';
 
 
 // import test cases, and exit if none are found
-const testCases = data["tests"] as LoginTest[];
-if (!testCases || testCases.length === 0) {
+const testCases: readonly LoginTest[] = data.tests;
+if (testCases.length === 0) {
   throw new Error('No test cases found in loop.data.json');
 }
 
-// load required environment variables, and exist if none are set
-if (!process.env.APP_USERNAME || !process.env.APP_PASSWORD) {
+// load required environment variables, and exit if one is not set
+const { APP_USERNAME, APP_PASSWORD } = process.env;
+if (!APP_USERNAME || !APP_PASSWORD) {
   throw new Error('APP_USERNAME and APP_PASSWORD environment variables must be set');
 }
-const USERNAME = process.env.APP_USERNAME;
-const PASSWORD = process.env.APP_PASSWORD;
 
 
 // login before each test, and confirm the login was successful 
@@ -22,12 +21,12 @@ const PASSWORD = process.env.APP_PASSWORD;
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 
-  await page.getByLabel('Username').fill(USERNAME);
-  await page.getByLabel('Password').fill(PASSWORD);
+  await page.getByLabel('Username').fill(APP_USERNAME);
+  await page.getByLabel('Password').fill(APP_PASSWORD);
 
   await page.getByRole('button', { name: 'Sign in' }).click();
 
-  await page.waitForSelector('button:has-text("Logout")');
+  await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible();
 });
 
 // dynamically create/run the login automation tests as defined
@@ -35,26 +34,27 @@ test.beforeEach(async ({ page }) => {
 // relevant task resides within the correct column, and that the
 // tag(s) expected to be associated with that task are also present
 test.describe('Login Automation', () => {
-  for (const data of testCases) {
-    const task = data.task;
-    const column = data.column;
-    const tags = data.tags;
-    const platform = data.platform;
-
-    test(`${platform} ${task}`, async ({ page }) => {
+  for (const { task, column, tags, platform } of testCases) {
+    test(`${platform} - ${task}`, async ({ page }) => {
+      // navigate to the correct platform page and wait for it to load
       await page.getByRole('button', { name: platform }).click();
-      await page.waitForSelector(`header:has-text("${platform}")`);
+      await expect(page.locator('header')).toContainText(platform);
 
-      // locate all elements within the status column for the current test
-      const colElem = await page.getByRole('heading', { name: column }).locator('..');
-      // locate the specific task card within the previously selected status column 
-      const cardElem = await colElem.getByRole('heading', { name: task });
+      // locate the status column for the current task (used to locate the corresponding task card)
+      const colElem = page.getByRole('heading', { name: column }).locator('..');
+      
+      // locate the (root) card element for the current task
+      const cardElem = colElem.getByRole('heading', { name: task, exact: true }).locator('..');
       await expect(cardElem).toBeVisible();
+
+      // ensure there are not more (or less) tags than expected
+      const tagElems = cardElem.locator(':scope > div > span');
+      await expect(tagElems).toHaveCount(tags.length);
 
       // for each tag expected to be associated with the given task,
       // confirm that the tag is present within the selected task card 
       for (const tag of tags) {
-        await expect(cardElem.locator('..')).toContainText(tag);
+        await expect(tagElems.and(cardElem.getByText(tag, { exact: true }))).toBeVisible();
       }
     });
   }
