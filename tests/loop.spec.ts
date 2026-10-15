@@ -9,7 +9,7 @@ if (testCases.length === 0) {
   throw new Error('No test cases found in loop.data.json');
 }
 
-// load required environment variables, and exit if none are set
+// load required environment variables, and exit if one is not set
 const { APP_USERNAME, APP_PASSWORD } = process.env;
 if (!APP_USERNAME || !APP_PASSWORD) {
   throw new Error('APP_USERNAME and APP_PASSWORD environment variables must be set');
@@ -40,7 +40,7 @@ test.describe('Login Automation', () => {
       await page.getByRole('button', { name: platform }).click();
       await expect(page.locator('header')).toContainText(platform);
 
-      // locate the status column for the current task (used to locate the corrsponding task card)
+      // locate the status column for the current task (used to locate the corresponding task card)
       const colElem = page.getByRole('heading', { name: column }).locator('..');
       
       // locate the (root) card element for the current task
