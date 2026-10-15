@@ -1,37 +1,40 @@
 {
-  "platforms": {
-    "mobile": {
-      "columns": {
-        "to-do": {
-          "Implement user authentication": {
-            "tags": ["Feature", "High Priority"]
-          }
-        },
-        "in-progress": {
-          "Design system updates": {
-            "tags": ["Bug"]
-          } 
-        }
-      }
+  "tests": [
+    {
+      "task": "Implement user authentication",
+      "column": "To Do",
+      "tags": ["Feature", "High Priority"],
+      "platform": "Web Application"
     },
-    "web": {
-      "columns": {
-        "to-do": {
-          "Push notification system": {
-            "tags": ["Feature"]
-          }
-        },
-        "in-progress": {
-          "Offline mode": {
-            "tags": ["Feature", "High Priority"]
-          }
-        },
-        "done": {
-          "App icon design": {
-            "tags": ["Design"]
-          }
-        }
-      }
+    {
+      "task": "Design System Updates",
+      "column": "In Progress",
+      "tags": ["Bug"],
+      "platform": "Web Application"
+    },
+    {
+      "task": "Design system updates",
+      "column": "In Progress",
+      "tags": ["Design"],
+      "platform": "Web Application"
+    },
+    {
+      "task": "Push notification system",
+      "column": "To Do",
+      "tags": ["Feature"],
+      "platform": "Mobile Application"
+    },
+    {
+      "task": "Offline mode",
+      "column": "In Progress",
+      "tags": ["Feature", "High Priority"],
+      "platform": "Mobile Application"
+    },
+    {
+      "task": "App icon design",
+      "column": "Done",
+      "tags": ["Design"],
+      "platform": "Mobile Application"
     }
-  }
+  ]
 }
