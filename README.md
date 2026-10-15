@@ -1,7 +1,9 @@
 # Loop Technical Evaluation
 This repository contains all the relevant files for my Loop technical evaluation.  
 
-The purpose of this technical evaluation was to create a data-driven test suite for a set of Login Automation test scenarios in the provided application.
+The purpose of this technical evaluation was to create a data-driven test suite for a set of Login Automation test scenarios in the provided application.  
+
+Demo Video: https://youtu.be/lG2BPf9EirI
 
 ## Instructions
 First, copy the `.env.example` file into a `.env` file and fill the following fields with the appropriate values:  
