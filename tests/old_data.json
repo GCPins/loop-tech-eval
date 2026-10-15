@@ -1,0 +1,37 @@
+{
+  "platforms": {
+    "mobile": {
+      "columns": {
+        "to-do": {
+          "Implement user authentication": {
+            "tags": ["Feature", "High Priority"]
+          }
+        },
+        "in-progress": {
+          "Design system updates": {
+            "tags": ["Bug"]
+          } 
+        }
+      }
+    },
+    "web": {
+      "columns": {
+        "to-do": {
+          "Push notification system": {
+            "tags": ["Feature"]
+          }
+        },
+        "in-progress": {
+          "Offline mode": {
+            "tags": ["Feature", "High Priority"]
+          }
+        },
+        "done": {
+          "App icon design": {
+            "tags": ["Design"]
+          }
+        }
+      }
+    }
+  }
+}
