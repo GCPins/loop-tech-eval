@@ -7,8 +7,8 @@
       "platform": "Web Application"
     },
     {
-      "task": "Design System Updates",
-      "column": "In Progress",
+      "task": "Fix navigation bug",
+      "column": "To Do",
       "tags": ["Bug"],
       "platform": "Web Application"
     },

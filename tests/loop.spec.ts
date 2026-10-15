@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { data } from './loop.data.json';
+import { LoginTest } from './loop.model';
+import data from './loop.data.json';
 
+const testCases = data["tests"] as LoginTest[];
+
+if (!process.env.APP_USERNAME || !process.env.APP_PASSWORD) {
+  throw new Error('APP_USERNAME and APP_PASSWORD environment variables must be set');
+}
 
 const USERNAME = process.env.APP_USERNAME;
 const PASSWORD = process.env.APP_PASSWORD;
@@ -13,43 +19,28 @@ test.beforeEach(async ({ page }) => {
   await page.getByLabel('Password').fill(PASSWORD);
 
   await page.getByRole('button', { name: 'Sign in' }).click();
+
+  await page.waitForSelector('button:has-text("Logout")');
 });
 
+test.describe('Login Automation', () => {
+  for (const data of testCases) {
+    const task = data.task;
+    const column = data.column;
+    const tags = data.tags;
+    const platform = data.platform;
 
-test('web app to-do column two tags', async ({ page }) => {
-  // Expect a title "to contain" a substring.
-  // await expect(page).toHaveTitle(/Playwright/);
-});
+    test(`${platform} ${task}`, async ({ page }) => {
+      await page.getByRole('button', { name: platform }).click();
+      await page.waitForSelector(`header:has-text("${platform}")`);
 
-test('web app to-do column bug tag', async ({ page }) => {
-  // Click the get started link.
-  // await page.getByRole('link', { name: 'Get started' }).click();
+      const colElem = await page.getByRole('heading', { name: column }).locator('..');
+      const cardElem = await colElem.getByRole('heading', { name: task });
+      await expect(cardElem).toBeVisible();
 
-  // Expects page to have a heading with the name of Installation.
-  // await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
-
-test('web app in-progress column', async ({ page }) => {
-  // await page.getByRole('button', { name: 'Search' }).click();
-
-  // await expect(page.getByRole('link', { name: 'Powered by' })).toBeVisible();
-});
-
-test('mobile app to-do column', async ({ page }) => {
-  // Expect a title "to contain" a substring.
-  // await expect(page).toHaveTitle(/Playwright/);
-});
-
-test('mobile app in-progress column', async ({ page }) => {
-  // Click the get started link.
-  // await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  // await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
-
-test('mobile app done column', async ({ page }) => {
-  // await page.getByRole('button', { name: 'Search' }).click();
-
-  // await expect(page.getByRole('link', { name: 'Powered by' })).toBeVisible();
+      for (const tag of tags) {
+        await expect(cardElem.locator('..')).toContainText(tag);
+      }
+    });
+  }
 });
