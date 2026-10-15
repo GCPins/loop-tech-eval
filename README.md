@@ -12,14 +12,14 @@ APP_USERNAME=username_goes_here
 APP_PASSWORD=password_goes_here
 ```
 
-Next, please ensure you have installed Node.js v24 (LTS) and the latest version of pnpm and Playwright. Then, you can run the playwright tests (present in the `./tests/` directory) with the following command:  
+Next, install the project dependencies with `pnpm install`. On Fedora, run Playwright through the `pw` community wrapper:
 ```sh
-# run the playwright tests through the CLI
-pnpm exec playwright test
-# then, view the results of the latest run
-pnpm exec playwright show-report
+# Run the Playwright tests
+pw test
 
+# View the latest HTML report
+pw show-report
 
-# alternatively, you can run the tests in UI mode
-pnpm exec playwright test --ui
+# Alternatively, run the tests in UI mode
+pw test --ui
 ```
